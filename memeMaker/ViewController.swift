@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 struct Meme {
     var topText: String
     var bottomText: String
@@ -23,14 +24,22 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
 
     var control = false
 
+
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var UITopText: UITextField!
     @IBOutlet weak var UIbottomText: UITextField!
     @IBOutlet weak var actionButton: UIBarButtonItem!
-    
+
     @IBOutlet weak var UIToolBar: UIToolbar!
-    
+
+    let memeTextAttribues = [
+        NSAttributedStringKey.strokeColor.rawValue : UIColor.black,
+        NSAttributedStringKey.foregroundColor.rawValue : UIColor.white,
+        NSAttributedStringKey.strokeWidth.rawValue: NSNumber(value: -4.0),
+    ]
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -39,11 +48,23 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         UIbottomText.text = BOTTOM
         self.UITopText.delegate = self;
         self.UIbottomText.delegate = self;
+
+
+    }
+
+    private func setAttributes(_ UITextField: UITextField!) {
+        UITextField.defaultTextAttributes = memeTextAttribues
+        UITextField.textAlignment = .center
     }
 
     override func viewWillAppear(_ animated: Bool) {
 
         print("viewWillAppear")
+
+
+
+        setAttributes(UITopText)
+        setAttributes(UIbottomText)
         subscribeToKeyboardNotifications()
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         actionButton.isEnabled = control
@@ -172,7 +193,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     }
 
 
-
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
@@ -189,6 +209,5 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
             UIbottomText.text = ""
         }
     }
-
 }
 
