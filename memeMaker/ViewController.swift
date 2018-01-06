@@ -9,7 +9,7 @@
 import UIKit
 
 
-struct Meme {
+struct GeneratedMeme {
     var topText: String
     var bottomText: String
     var originalImage: UIImage
@@ -21,6 +21,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
 // String constants
     let TOP: String = "TOP"
     let BOTTOM: String = "BOTTOM"
+    let CAMERA: String = "CAMERA"
+    let PHOTOLIBRARY: String = "PHOTOLIBRARY"
 
     var control = false
 
@@ -34,8 +36,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     @IBOutlet weak var UIToolBar: UIToolbar!
 
     let memeTextAttribues = [
-        NSAttributedStringKey.strokeColor.rawValue : UIColor.black,
-        NSAttributedStringKey.foregroundColor.rawValue : UIColor.white,
+        NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
+        NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
         NSAttributedStringKey.strokeWidth.rawValue: NSNumber(value: -4.0),
     ]
 
@@ -46,21 +48,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
 
         UITopText.text = TOP
         UIbottomText.text = BOTTOM
-        self.UITopText.delegate = self;
-        self.UIbottomText.delegate = self;
-
 
     }
 
     private func setAttributes(_ UITextField: UITextField!) {
         UITextField.defaultTextAttributes = memeTextAttribues
         UITextField.textAlignment = .center
+        UIbottomText.delegate = self
+        UITopText.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
 
         print("viewWillAppear")
-
 
 
         setAttributes(UITopText)
@@ -82,21 +82,27 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     // Select a image from the album
     @IBAction func pickOneImage(_ sender: Any) {
         print("pickAImage")
-
-        let pickerController = UIImagePickerController()
-        pickerController.delegate = self
-        pickerController.sourceType = .photoLibrary
-        present(pickerController, animated: true, completion: nil)
-
+        pickAnImageFrom(PHOTOLIBRARY)
     }
 
     // Select a image from Camera
     @IBAction func pickAnImageFromCamera(_ sender: Any) {
         print("pickImageFromCamera")
+        pickAnImageFrom(CAMERA)
+    }
+
+    private func pickAnImageFrom(_ string: String) {
+
 
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .camera
+
+        if string == CAMERA {
+            imagePicker.sourceType = .camera
+        } else if string == PHOTOLIBRARY {
+            imagePicker.sourceType = .photoLibrary
+        }
+
         present(imagePicker, animated: true, completion: nil)
     }
 
@@ -133,9 +139,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     }
 
     @objc func keyboardWillShow(_ notification: Notification) {
-        print("keyboardWillShow")
 
-        view.frame.origin.y = 0 - getKeyboardHeight(notification)
+        print("keyboardWillShow")
+            if UIbottomText.isFirstResponder {
+                view.frame.origin.y = 0 - getKeyboardHeight(notification)
+
+        }
     }
 
     @objc func keyboardWillHide(_ notification: Notification) {
@@ -170,8 +179,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         print("generatedMeme")
 
         UIToolBar.isHidden = true
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
+        UIGraphicsBeginImageContext(view.frame.size)
+        view.drawHierarchy(in: view.frame, afterScreenUpdates: true)
         let memedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         UIToolBar.isHidden = false
@@ -185,13 +194,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
 
         // Create the meme
         let memedImage = generateMemedImage()
-        let _ = Meme(topText: UITopText.text!,
+        let _ = GeneratedMeme(topText: UITopText.text!,
                 bottomText: UIbottomText.text!,
                 originalImage: imageView.image!,
                 memedImage: memedImage)
 
     }
-
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
