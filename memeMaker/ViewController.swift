@@ -24,7 +24,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     let CAMERA: String = "CAMERA"
     let PHOTOLIBRARY: String = "PHOTOLIBRARY"
 
-    var control = false
+    var control: Bool = false
 
 
     @IBOutlet weak var cameraButton: UIBarButtonItem!
@@ -89,6 +89,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     @IBAction func pickAnImageFromCamera(_ sender: Any) {
         print("pickImageFromCamera")
         pickAnImageFrom(CAMERA)
+    }
+    
+    @IBAction func cancelMeme(_ sender: Any){
+        UITopText.text = TOP
+        UIbottomText.text = BOTTOM
+        imageView.image = nil
+        
     }
 
     private func pickAnImageFrom(_ string: String) {

@@ -40,6 +40,12 @@
                                             <action selector="pickAnImageFromCamera:" destination="BYZ-38-t0r" id="ui4-Tb-VDp"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="2uz-ed-r5U"/>
+                                    <barButtonItem systemItem="cancel" id="UMw-HT-5qJ">
+                                        <connections>
+                                            <action selector="cancelMeme:" destination="BYZ-38-t0r" id="HfN-RT-1ui"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="AIn-57-7I8"/>
                                     <barButtonItem systemItem="action" id="pYr-bt-NWg">
                                         <connections>
