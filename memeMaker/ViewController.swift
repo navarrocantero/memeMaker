@@ -90,12 +90,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         print("pickImageFromCamera")
         pickAnImageFrom(CAMERA)
     }
-    
-    @IBAction func cancelMeme(_ sender: Any){
+
+    @IBAction func cancelMeme(_ sender: Any) {
         UITopText.text = TOP
         UIbottomText.text = BOTTOM
         imageView.image = nil
-        
+        control = false;
+        actionButton.isEnabled = control
     }
 
     private func pickAnImageFrom(_ string: String) {
@@ -119,7 +120,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         let activityController = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
         activityController.completionWithItemsHandler = { activity, success, items, error in
             self.save()
-            self.dismiss(animated: true, completion: nil)
+            if success {
+                self.dismiss(animated: true, completion: nil)
+            }
         }
 
         present(activityController, animated: true, completion: nil)
@@ -148,8 +151,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     @objc func keyboardWillShow(_ notification: Notification) {
 
         print("keyboardWillShow")
-            if UIbottomText.isFirstResponder {
-                view.frame.origin.y = 0 - getKeyboardHeight(notification)
+        if UIbottomText.isFirstResponder {
+            view.frame.origin.y = 0 - getKeyboardHeight(notification)
 
         }
     }
